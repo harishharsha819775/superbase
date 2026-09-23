@@ -2,79 +2,65 @@ import { useState } from "react";
 import { supabase } from "../supabase";
 
 function BookingHistory() {
+  const [bookings, setBookings] = useState([]);
 
-  const [bookings, setBookings] = useState([]);
+  async function getBookings() {
+    const { data, error } = await supabase
+      .from("bookings")
+      .select("*");
 
-async function handleBooking() {
+    if (error) {
+      console.error(error);
+      alert("Failed to retrieve bookings");
+      return;
+    }
 
-        if (!name || !tickets || !stand || !venue || !place) {
-            alert("Please fill all the details");
-            return;
-        }
+    setBookings(data);
+  }
 
-        const { data, error } = await supabase
-            .from("bookings")
-            .insert([
-            {
-                name: name,
-                tickets: Number(tickets),
-                stand: stand,
-                venue: venue,
-                place: place
-            }
-            ]);
+  return (
+    <main className="history-page">
 
-        if (error) {
-            console.error(error);
-            alert("Booking failed");
-            return;
-        }
+      <h1>Booking History</h1>
 
-        alert("Ticket booked successfully!");
+      <button className="history-button" onClick={getBookings}>
+        View Bookings
+      </button>
 
-        }
-  return (
-    <main className="history-page">
+      <div className="history-table-wrapper">
+        <table className="history-table">
 
-      <h1>Booking History</h1>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Tickets</th>
+              <th>Stand</th>
+              <th>Venue</th>
+            </tr>
+          </thead>
 
-      <button className="history-button" onClick={getBookings}>
-        View Bookings
-      </button>
+          <tbody>
 
-      <div className="history-table-wrapper">
-        <table className="history-table">
+            {bookings.map((booking) => (
 
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Tickets</th>
-              <th>Stand</th>
-              <th>Venue</th>
-            </tr>
-          </thead>
+              <tr key={booking.id}>
 
-          <tbody>
+                <td>{booking.name}</td>
+                <td>{booking.tickets}</td>
+                <td>{booking.stand}</td>
+                <td>{booking.venue}</td>
 
-            {bookings.map((booking) => (
+              </tr>
 
-              <tr key={booking.id}>
+            ))}
 
-                <td>{booking.name}</td>
-                <td>{booking.tickets}</td>
-                <td>{booking.stand}</td>
-                <td>{booking.venue}</td>
+          </tbody>
 
-              </tr>
+        </table>
+      </div>
 
-            ))}
-          </tbody>
-
-        </table>
-      </div>
-
-    </main>
-  );
+    </main>
+  );
 }
 
 export default BookingHistory;

@@ -1,127 +1,126 @@
 import { useState } from "react";
-
 import { supabase } from "../supabase";
 
 function Booking() {
 
-    const [name, setName] = useState("");
-    const [tickets, setTickets] = useState("");
-    const [stand, setStand] = useState("");
-    const [venue, setVenue] = useState("");
-    async function handleBooking() {
+  const [name, setName] = useState("");
+  const [tickets, setTickets] = useState("");
+  const [stand, setStand] = useState("");
+  const [venue, setVenue] = useState("");
 
-        if (!name || !tickets || !stand || !venue || !place) {
-            alert("Please fill all the details");
-            return;
-        }
+  async function handleBooking() {
 
-        const { data, error } = await supabase
-            .from("bookings")
-            .insert([
-            {
-                name: name,
-                tickets: Number(tickets),
-                stand: stand,
-                venue: venue,
-                place: place
-            }
-            ]);
+    if (!name || !tickets || !stand || !venue) {
+      alert("Please fill all the details");
+      return;
+    }
 
-        if (error) {
-            console.error(error);
-            alert("Booking failed");
-            return;
-        }
+    const { data, error } = await supabase
+      .from("bookings")
+      .insert([
+        {
+          name: name,
+          tickets: Number(tickets),
+          stand: stand,
+          venue: venue
+        }
+      ]);
 
-        alert("Ticket booked successfully!");
+    if (error) {
+      console.error(error);
+      alert("Booking failed");
+      return;
+    }
 
-        }
-    
+    alert("Ticket booked successfully!");
+  }
 
-    return (
-        <main className="booking-page">
+  return (
+    <main className="booking-page">
 
-            <h1>Book Your Ticket</h1>
+      <h1>Book Your Ticket</h1>
 
-            <div className="booking-form">
+      <div className="booking-form">
 
-                <label htmlFor="name">Name</label>
+        <label htmlFor="name">Name</label>
 
-                <input
-                    id="name"
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Enter your name"
-                />
+        <input
+          id="name"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Enter your name"
+        />
 
-                <label htmlFor="tickets">Number of Tickets</label>
+        <label htmlFor="tickets">Number of Tickets</label>
 
-                <input
-                    id="tickets"
-                    type="number"
-                    min="1"
-                    value={tickets}
-                    onChange={(e) => setTickets(e.target.value)}
-                    placeholder="Enter number of tickets"
-                />
+        <input
+          id="tickets"
+          type="number"
+          min="1"
+          value={tickets}
+          onChange={(e) => setTickets(e.target.value)}
+          placeholder="Enter number of tickets"
+        />
 
-                <label htmlFor="stand">Select Stand</label>
+        <label htmlFor="stand">Select Stand</label>
 
-                <select
-                    id="stand"
-                    value={stand}
-                    onChange={(e) => setStand(e.target.value)}
-                >
-                    <option value="">-- Select Stand --</option>
-                    <option value="General Stand">General Stand</option>
-                    <option value="VIP Stand">VIP Stand</option>
-                </select>
+        <select
+          id="stand"
+          value={stand}
+          onChange={(e) => setStand(e.target.value)}
+        >
+          <option value="">-- Select Stand --</option>
+          <option value="General Stand">General Stand</option>
+          <option value="VIP Stand">VIP Stand</option>
+        </select>
 
-                <label htmlFor="venue">Select Venue</label>
+        <label htmlFor="venue">Select Venue</label>
 
-                <select
-                    id="venue"
-                    value={venue}
-                    onChange={(e) => setVenue(e.target.value)}
-                >
-                    <option value="">-- Select Venue --</option>
-                    <option value="Wankhede Stadium">Wankhede Stadium</option>
-                    <option value="M. Chinnaswamy Stadium">
-                        M. Chinnaswamy Stadium
-                    </option>
-                </select>
+        <select
+          id="venue"
+          value={venue}
+          onChange={(e) => setVenue(e.target.value)}
+        >
+          <option value="">-- Select Venue --</option>
+          <option value="Wankhede Stadium">
+            Wankhede Stadium
+          </option>
+          <option value="M. Chinnaswamy Stadium">
+            M. Chinnaswamy Stadium
+          </option>
+        </select>
 
-                <button onClick={handleBooking}>
-                    Book Ticket
-                </button>
+        <button onClick={handleBooking}>
+          Book Ticket
+        </button>
 
-            </div>
+      </div>
 
-            <section className="booking-details">
+      <section className="booking-details">
 
-                <h3>Booking Details</h3>
+        <h3>Booking Details</h3>
 
-                <p>
-                    Name: <strong>{name || "-"}</strong>
-                </p>
+        <p>
+          Name: <strong>{name || "-"}</strong>
+        </p>
 
-                <p>
-                    Tickets: <strong>{tickets || "-"}</strong>
-                </p>
+        <p>
+          Tickets: <strong>{tickets || "-"}</strong>
+        </p>
 
-                <p>
-                    Stand: <strong>{stand || "-"}</strong>
-                </p>
+        <p>
+          Stand: <strong>{stand || "-"}</strong>
+        </p>
 
-                <p>
-                    Venue: <strong>{venue || "-"}</strong>
-                </p>
+        <p>
+          Venue: <strong>{venue || "-"}</strong>
+        </p>
 
-            </section>
+      </section>
 
-        </main>
-    );
+    </main>
+  );
 }
 
 export default Booking;
